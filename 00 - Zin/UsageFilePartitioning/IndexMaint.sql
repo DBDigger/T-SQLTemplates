@@ -1,0 +1,14 @@
+ALTER INDEX INVOICEITEMDETAILS_4UsageFile_PK ON dbo.invoiceitemdetails_4usagefile REbuild
+ALTER INDEX INX_INVOICEITEMDETAILS_4UsageFile_ACCOUNTINGID ON dbo.invoiceitemdetails_4usagefile REbuild
+ALTER INDEX INX_InvoiceitemDetails_4UsageFile_Billing ON dbo.invoiceitemdetails_4usagefile REbuild
+ALTER INDEX INX_INVOICEITEMDETAILS_4UsageFile_INVOICEITEMID_FK ON dbo.invoiceitemdetails_4usagefile REbuild
+ALTER INDEX INX_INVOICEITEMDETAILS_4UsageFile_SERVICEIDZONEID ON dbo.invoiceitemdetails_4usagefile REbuild
+ALTER INDEX Inx_INVOICEITEMDETAILS_BILLINGSESSIONID_4UsageFile_FK  ON dbo.invoiceitemdetails_4usagefile REbuild
+GO
+
+-- Update stats
+UPDATE STATISTICS invoiceitemdetails_4usagefile 
+GO
+
+EXEC sp_recompile invoiceitemdetails_4usagefile
+GO

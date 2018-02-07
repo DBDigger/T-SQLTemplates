@@ -1,0 +1,1 @@
+EXEC xp_logininfo 'WYLESSHUB\x-khubaib.rehman',  'members' 

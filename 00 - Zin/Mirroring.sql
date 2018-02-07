@@ -1,0 +1,1 @@
+EXEC msdb..sp_dbmmonitorresults @database_name = m2mhub_crm

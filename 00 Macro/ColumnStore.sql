@@ -1,0 +1,1 @@
+select schema_name(o.schema_id)+'.'+o.name, i.type_desc from sys.indexes i inner join sys.objects o on i.object_id = o.object_id where i.type > = 4 order by 1
