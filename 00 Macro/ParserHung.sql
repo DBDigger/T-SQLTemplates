@@ -1,3 +1,11 @@
+/*
+When the stat parser hangs on 43 and we resume from the next file, we end up with missed stats in ASI_StatsRaw. To help keep downstream impact to a minimum, please use the attached script to generate a restatement script. The generated script should be run after the parser starts to process the next file.
+
+You will need to set the from/to variables at the beginning of the script to include the hour before the failed file and the hour of the failed file. So if the parser hangs on the file for 2018020613, you will need to set the [from variable] = 2018020612 and the [to variable] = 2018020613. Do not change the minutes for action_dt variables, just the hour part. 
+
+It will output the statements needed to delete the partial data currently in the stat table and copy the stats for the period specified from StatsStgArea_02. The output will contain 1 row per table being processed. It is ok to run all the statements together and should take about 20 mins for restatement to complete.
+
+*/
 declare @part_yyyymmddhh_from varchar(20), @part_yyyymmddhh_to varchar(20)
 declare @action_dt_from varchar(25),@action_dt_to varchar(25)
 
@@ -184,3 +192,14 @@ order by c.Table_NM
 -- 'where a.part_yyyymmddhh between 2018013014 and 2018013017'
 
 --from #tmp
+
+
+
+--You can run this before and after for both stats raw and _02 to verify counts per hour. Just make sure you have the correct day & hours.
+
+select PART_YYYYMMDDHH
+       ,count(*) cnt
+from asi_statsraw_02.dbo.stat_acad11 
+where PART_YYYYMMDDHH between 2018020700 and 2018020723 
+group by PART_YYYYMMDDHH
+order by PART_YYYYMMDDHH
