@@ -9,6 +9,12 @@ WHERE database_id = DB_ID('M2MHUB_Billing');
 ALTER DATABASE M2MHUB_Billing SET OFFLINE WITH ROLLBACK IMMEDIATE
 GO
 
+USE master;
+SELECT 'move /Y "'+physical_name +'" "'+ replace(physical_name,'F:','N:')+'"',name as LogicalFileName ,'ALTER DATABASE ['+DB_NAME(database_id)+'] MODIFY FILE  ( NAME = '+name+' , FILENAME = '''+physical_name+''');' AS Stmt, physical_name AS FileLocation
+, state_desc AS Status 
+FROM sys.master_files 
+WHERE database_id = DB_ID('BI_EDW')
+and name in (
 
 -- Modify the FILENAME to new location for every file moved. Only one file can be moved at a time using ALTER DATABASE.
 USE master
