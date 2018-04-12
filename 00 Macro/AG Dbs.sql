@@ -9,7 +9,12 @@ from sys.dm_hadr_availability_replica_states rs join sys.availability_replicas r
 on rs.replica_id=r.replica_id
 where rs.is_local=1
 GO
-
+:Connect ASI-SQLPCN2-15
+	IF (SELECT state FROM sys.endpoints WHERE name = N'Hadr_endpoint') <> 0
+	BEGIN
+		ALTER ENDPOINT [Hadr_endpoint] STATE = STARTED
+	END
+	GO
     SELECT db_name(database_id) as DBName,
         session_id FROM sys.dm_exec_requests
         WHERE command = 'DB STARTUP'
