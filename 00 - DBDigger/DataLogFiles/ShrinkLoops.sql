@@ -1,6 +1,6 @@
 SELECT
   'declare @filesize int;' + 'set @filesize = ' + CAST(CONVERT(int, a.Size / 128.000, 2) 
-  + 500 AS varchar(10)) + '; WHILE @filesize > ' + CAST(CONVERT(int, a.Size / 128.000, 2) 
+  + 500 AS varchar(10)) + '; WHILE @filesize > ' + CAST(CONVERT(int, FILEPROPERTY(a.NAME, 'SpaceUsed') / 128.000, 2) 
   + 1024 AS varchar(10)) + ' BEGIN; DBCC SHRINKFILE (N''' + a.NAME + 
   ''' , @filesize);  WAITFOR DELAY ''00:00:07'';  SET @filesize = @filesize - 1000; END GO' AS ShrinkLoop,
   b.groupname AS 'File Group',
@@ -15,10 +15,9 @@ LEFT OUTER JOIN sysfilegroups b (NOLOCK)
   ON a.data_space_id = b.groupid
 --where (CONVERT(INT, ROUND((a.Size - FILEPROPERTY(a.NAME, 'SpaceUsed')) / 128.000, 2)) * 100) / (CONVERT(INT, ROUND(a.Size / 128.000, 2))) > 30
 --where CONVERT(INT, (a.Size - FILEPROPERTY(a.NAME, 'SpaceUsed')) / 128.000, 2) > 10000
---where physical_name like 'F%'
+where physical_name like 'N%'
 ORDER BY [Available Space (MB)] DESC
 GO
-
 
 
 
